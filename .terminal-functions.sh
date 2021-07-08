@@ -64,7 +64,11 @@ function checkSSHKeyAvailable() {
 
 function addSSHKey() {
   # $1 = SSH Key filename
-  ssh-add ~/.ssh/$1
+  # For Linux
+  #ssh-add ~/.ssh/$1
+
+  # For Mac
+  #ssh-add -K ~/.ssh/$1
 }
 
 # Droidcam installation
@@ -96,6 +100,10 @@ function installDroidcam() {
 function resetTeamViewer() {
     _PWD="$(pwd)"
     cd ~
-    sudo ./reset_teamviewer.sh
+    # For Linux
+    # sudo ./reset_teamviewer.sh
+    
+    # For mac
+    #sudo reset_teamviewer_macos.py
     cd $_PWD
 }
