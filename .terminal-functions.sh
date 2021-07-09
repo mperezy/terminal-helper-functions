@@ -50,6 +50,11 @@ getLastCommitsHash() {
     fi
 }
 
+# get head hash commit given a git repository
+getHeadHashCommit() {
+  echo "$(log "The HEAD commit hash is =>")$(header $(getLastCommitsHash yes 1 | cut -d' ' -f 2 | cut -c-7))"
+}
+
 # docker exec
 dockerInside() {
     # $1 = container name
