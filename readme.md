@@ -14,6 +14,11 @@
     . ~/.terminal-functions.sh
     ```
 
+# GoPro Webcam Service
+- I bought a GoPro action camera and I use it as a webcam in Linux, so in order to use it I followed this [Github repo](https://github.com/jschmid1/gopro_as_webcam_on_linux). JIC: This repo only works with GoPro Hero 8 and Hero 9.
+
+- The commands added for this GoPro webcam are: **`goProWebcamService`** and **`editGoProWebcamService`**.
+
 - Now we must reset or open a new terminal and we're done. Enjoy!
 
 ## Examples about how to use some scripts

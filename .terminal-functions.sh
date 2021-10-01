@@ -69,11 +69,12 @@ function checkSSHKeyAvailable() {
 
 function addSSHKey() {
   # $1 = SSH Key filename
-  # For Linux
-  #ssh-add ~/.ssh/$1
-
-  # For Mac
-  #ssh-add -K ~/.ssh/$1
+  
+  if [ "$(uname)" == "Darwin" ]; then
+    ssh-add -K ~/.ssh/$1
+  else
+    ssh-add ~/.ssh/$1
+  fi
 }
 
 # Droidcam installation
@@ -105,10 +106,51 @@ function installDroidcam() {
 function resetTeamViewer() {
     _PWD="$(pwd)"
     cd ~
-    # For Linux
-    # sudo ./reset_teamviewer.sh
     
-    # For mac
-    #sudo reset_teamviewer_macos.py
+    if [ "$(uname)" == "Darwin" ]; then
+      sudo reset_teamviewer_macos.py
+    else
+      sudo ./reset_teamviewer.sh
+    fi
+
     cd $_PWD
+}
+
+# Restart internet interfaces
+function restartInternet() {
+  log "Restarting internet interfaces..."
+   sudo ifdown -a && sudo ifup -a
+}
+
+# GoPro service actions
+function goProWebcamService() {
+  # $1 = status or restart
+  
+  if [ -z $1 ]; then 
+    log "status: check status of services"
+    log "restart: restart service"
+    log "start: start service"
+    log "h: dispay options"
+  else 
+    if [ $1 == "h" ]; then
+      log "status: check status of services"
+      log "restart: restart service"
+      log "start: start service"
+      log "h: dispay options"
+    else
+      if [ "$(uname)" == 'Darwin' ]; then
+        error "This will works only in Linux"
+      else
+        sudo systemctl $1 gopro_webcam.service
+        log "I've finished!!"
+      fi
+    fi
+  fi
+}
+
+# Edit GoPro service file
+function editGoProWebcamService() {
+  log "Openning nano editor"
+  
+  sudo nano /etc/systemd/system/gopro_webcam.service
 }
