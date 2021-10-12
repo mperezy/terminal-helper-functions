@@ -8,6 +8,10 @@ function log() {
   printf " \xE2\x9C\x94 $(tput setaf 2)$(tput bold)$1$(tput sgr0)\n"
 }
 
+function yellowLog() {
+  printf "$(tput setaf 3)$(tput bold)$1$(tput sgr0)"
+}
+
 function error() {
   printf " x $(tput setaf 1)$(tput bold)$1$(tput sgr0)\n"
 }
@@ -125,24 +129,61 @@ function restartInternet() {
 # GoPro service actions
 function goProWebcamService() {
   # $1 = status or restart
-  
-  if [ -z $1 ]; then 
-    log "status: check status of services"
-    log "restart: restart service"
-    log "start: start service"
-    log "h: dispay options"
-  else 
+
+  whitelist=("enable-gopro", "disable-gopro", "start-stream", "stop-stream")
+
+  if [[ " ${whitelist[@]} " =~ $1 ]]; then
+    gopro_interface=$(ifconfig | grep enx | sed 's/:.*//')
+    gopro_ip=$(ip -4 addr show dev $gopro_interface | grep -Po '(?<=inet )[\d.]+')
+    gopro_internal_ip=$(echo $gopro_ip | awk -F"." '{print $1"."$2"."$3".51"}')
+  fi
+
+  if [ -z $1 ]; then
+    log "status | restart | start | stop: $(yellowLog "make some action in gopro service.")"
+    log "check-trail: $(yellowLog "to check service's log trail.")"
+    log "start-stream | stop-stream: $(yellowLog "to start/stop the GoPro expose to O.S.")"
+    log "disable-gopro | enable-gopro: $(yellowLog "to enabe/disable gopro webcam mode. Use 'goProWebcamService start' if the gopro_webcam is already started.")"
+    log "h: $(yellowLog "dispay options.")"
+  else
     if [ $1 == "h" ]; then
-      log "status: check status of services"
-      log "restart: restart service"
-      log "start: start service"
-      log "h: dispay options"
+      log "status | restart | start | stop: $(yellowLog "make some action in gopro service.")"
+      log "check-trail: $(yellowLog "to check service's log trail.")"
+      log "start-stream | stop-stream: $(yellowLog "to start/stop the GoPro expose to O.S.")"
+      log "disable-gopro | enable-gopro: $(yellowLog "to enabe/disable gopro webcam mode. Use 'goProWebcamService start' if the gopro_webcam is already started.")"
+      log "h: $(yellowLog "dispay options.")"
     else
       if [ "$(uname)" == 'Darwin' ]; then
         error "This will works only in Linux"
       else
-        sudo systemctl $1 gopro_webcam.service
-        log "I've finished!!"
+        if [ $1 == "check-trail" ]; then
+          sudo journalctl -u gopro_webcam -f
+        else
+          if [ $1 == "start-stream" ]; then
+            goProWebcamService start
+          else
+            if [ $1 == "stop-stream" ]; then
+              # To stop v4l2loopback
+              # lsmod | grep v4l2loopback
+              # sudo systemctl stop gopro_webcam.service
+              # sudo modprobe -r v4l2loopback v4l2loopback
+              
+              goProWebcamService stop
+              sudo modprobe -r v4l2loopback v4l2loopback
+              curl http://$gopro_internal_ip/gp/gpWebcam/STOP
+            else 
+              if [ $1 == "enable-gopro" ]; then
+                curl http://$gopro_internal_ip/gp/gpWebcam/START
+              else
+                if [ $1 == "disable-gopro" ]; then
+                  curl http://$gopro_internal_ip/gp/gpWebcam/STOP
+                else
+                  sudo systemctl $1 gopro_webcam.service
+                  log "I've finished!!"
+                fi
+              fi
+            fi
+          fi
+        fi
       fi
     fi
   fi

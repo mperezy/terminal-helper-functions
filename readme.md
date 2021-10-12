@@ -17,8 +17,11 @@
 # GoPro Webcam Service
 - I bought a GoPro action camera and I use it as a webcam in Linux, so in order to use it I followed this [Github repo](https://github.com/jschmid1/gopro_as_webcam_on_linux). JIC: This repo only works with GoPro Hero 8 and Hero 9.
 
+- For installation and configuration, check the content in folder [gopro-webcam-config](gopro-webcam-config/)
+
 - The commands added for this GoPro webcam are: **`goProWebcamService`** and **`editGoProWebcamService`**.
 
+# Use it !
 - Now we must reset or open a new terminal and we're done. Enjoy!
 
 ## Examples about how to use some scripts
