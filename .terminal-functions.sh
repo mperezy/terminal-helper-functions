@@ -74,7 +74,7 @@ function checkSSHKeyAvailable() {
 function addSSHKey() {
   # $1 = SSH Key filename
   
-  if [ "$(uname)" == "Darwin" ]; then
+  if [ "$(uname)" = "Darwin" ]; then
     ssh-add -K ~/.ssh/$1
   else
     ssh-add ~/.ssh/$1
