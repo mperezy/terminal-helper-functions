@@ -1,18 +1,18 @@
 # Printers scripts
 # --- Reference: https://linuxcommand.org/lc3_adv_tput.php
-function header() {
+header() {
   printf " $(tput sgr 0 1)$(tput setaf 6)$(tput bold)$1$(tput sgr0)\n"
 }
 
-function log() {
+log() {
   printf " \xE2\x9C\x94 $(tput setaf 2)$(tput bold)$1$(tput sgr0)\n"
 }
 
-function yellowLog() {
+yellowLog() {
   printf "$(tput setaf 3)$(tput bold)$1$(tput sgr0)"
 }
 
-function error() {
+error() {
   printf " x $(tput setaf 1)$(tput bold)$1$(tput sgr0)\n"
 }
 
@@ -31,14 +31,14 @@ checkHerokuAppLogs() {
 }
 
 # git branch script
-function createBranchWording() {
+createBranchWording() {
   # $2 = Branch wording
   title=$(echo $2 | tr " " -)
 
   echo $(log "Your branch could be ->" && header "\"$1-$title\"")
 }
 
-function setYourGithubUsernameCredentials() {
+setYourGithubUsernameCredentials() {
    git config --local user.name "Your name"
    git config --local user.email "your@email.com"
 }
@@ -67,13 +67,13 @@ dockerInside() {
 }
 
 # SSH scripts
-function checkSSHKeyAvailable() {
+checkSSHKeyAvailable() {
     ls -l ~/.ssh/
 }
 
-function addSSHKey() {
+addSSHKey() {
   # $1 = SSH Key filename
-  
+
   if [ "$(uname)" = "Darwin" ]; then
     ssh-add -K ~/.ssh/$1
   else
@@ -82,7 +82,7 @@ function addSSHKey() {
 }
 
 # Droidcam installation
-function installDroidcam() {
+installDroidcam() {
     _PWD="$(pwd)"
     header "Changing to /tmp/ directory..."
     cd /tmp/
@@ -107,11 +107,11 @@ function installDroidcam() {
 }
 
 # Teamviewer reset
-function resetTeamViewer() {
+resetTeamViewer() {
     _PWD="$(pwd)"
     cd ~
-    
-    if [ "$(uname)" == "Darwin" ]; then
+
+    if [ "$(uname)" = "Darwin" ]; then
       sudo reset_teamviewer_macos.py
     else
       sudo ./reset_teamviewer.sh
@@ -121,13 +121,13 @@ function resetTeamViewer() {
 }
 
 # Restart internet interfaces
-function restartInternet() {
+restartInternet() {
   log "Restarting internet interfaces..."
    sudo ifdown -a && sudo ifup -a
 }
 
 # GoPro service actions
-function goProWebcamService() {
+goProWebcamService() {
   # $1 = status or restart
 
   whitelist=("enable-gopro", "disable-gopro", "start-stream", "stop-stream")
@@ -145,36 +145,36 @@ function goProWebcamService() {
     log "disable-gopro | enable-gopro: $(yellowLog "to enabe/disable gopro webcam mode. Use 'goProWebcamService start' if the gopro_webcam is already started.")"
     log "h: $(yellowLog "dispay options.")"
   else
-    if [ $1 == "h" ]; then
+    if [ $1 = "h" ]; then
       log "status | restart | start | stop: $(yellowLog "make some action in gopro service.")"
       log "check-trail: $(yellowLog "to check service's log trail.")"
       log "start-stream | stop-stream: $(yellowLog "to start/stop the GoPro expose to O.S.")"
       log "disable-gopro | enable-gopro: $(yellowLog "to enabe/disable gopro webcam mode. Use 'goProWebcamService start' if the gopro_webcam is already started.")"
       log "h: $(yellowLog "dispay options.")"
     else
-      if [ "$(uname)" == 'Darwin' ]; then
+      if [ "$(uname)" = 'Darwin' ]; then
         error "This will works only in Linux"
       else
-        if [ $1 == "check-trail" ]; then
+        if [ $1 = "check-trail" ]; then
           sudo journalctl -u gopro_webcam -f
         else
-          if [ $1 == "start-stream" ]; then
+          if [ $1 = "start-stream" ]; then
             goProWebcamService start
           else
-            if [ $1 == "stop-stream" ]; then
+            if [ $1 = "stop-stream" ]; then
               # To stop v4l2loopback
               # lsmod | grep v4l2loopback
               # sudo systemctl stop gopro_webcam.service
               # sudo modprobe -r v4l2loopback v4l2loopback
-              
+
               goProWebcamService stop
               sudo modprobe -r v4l2loopback v4l2loopback
               curl http://$gopro_internal_ip/gp/gpWebcam/STOP
-            else 
-              if [ $1 == "enable-gopro" ]; then
+            else
+              if [ $1 = "enable-gopro" ]; then
                 curl http://$gopro_internal_ip/gp/gpWebcam/START
               else
-                if [ $1 == "disable-gopro" ]; then
+                if [ $1 = "disable-gopro" ]; then
                   curl http://$gopro_internal_ip/gp/gpWebcam/STOP
                 else
                   sudo systemctl $1 gopro_webcam.service
@@ -190,8 +190,8 @@ function goProWebcamService() {
 }
 
 # Edit GoPro service file
-function editGoProWebcamService() {
+editGoProWebcamService() {
   log "Openning nano editor"
-  
+
   sudo nano /etc/systemd/system/gopro_webcam.service
 }
