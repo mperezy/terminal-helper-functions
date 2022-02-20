@@ -4,7 +4,7 @@ header() {
   printf " $(tput sgr 0 1)$(tput setaf 6)$(tput bold)$1$(tput sgr0)\n"
 }
 
-log() {
+greenLog() {
   printf " \xE2\x9C\x94 $(tput setaf 2)$(tput bold)$1$(tput sgr0)\n"
 }
 
@@ -35,7 +35,7 @@ createBranchWording() {
   # $2 = Branch wording
   title=$(echo $2 | tr " " -)
 
-  echo $(log "Your branch could be ->" && header "\"$1-$title\"")
+  echo $(greenLog "Your branch could be ->" && header "\"$1-$title\"")
 }
 
 setYourGithubUsernameCredentials() {
@@ -56,7 +56,7 @@ getLastCommitsHash() {
 
 # get head hash commit given a git repository
 getHeadHashCommit() {
-  echo "$(log "The HEAD commit hash is =>")$(header $(getLastCommitsHash yes 1 | cut -d' ' -f 2 | cut -c-7))"
+  echo "$(greenLog "The HEAD commit hash is =>")$(header $(getLastCommitsHash yes 1 | cut -d' ' -f 2 | cut -c-7))"
 }
 
 # docker exec
@@ -86,23 +86,23 @@ installDroidcam() {
     _PWD="$(pwd)"
     header "Changing to /tmp/ directory..."
     cd /tmp/
-    log "Placed in /tmp/"
+    greenLog "Placed in /tmp/"
 
     header "Downloading droidcam..."
     wget -O droidcam_latest.zip https://files.dev47apps.net/linux/droidcam_1.7.3.zip
-    log "Droidcam downloaded!"
+    greenLog "Droidcam downloaded!"
 
     header "Unzipping Droidcam..."
     unzip droidcam_latest.zip -d droidcam
-    log "Droidcam unzipped"
+    greenLog "Droidcam unzipped"
 
     header "Changing to droidcam/ directory..."
     cd droidcam
-    log "Placed in droidcam/"
+    greenLog "Placed in droidcam/"
 
     header "Installing Droidcam..."
     sudo ./install-video
-    log "Droidcam installed"
+    greenLog "Droidcam installed"
     cd $_PWD
 }
 
@@ -122,7 +122,7 @@ resetTeamViewer() {
 
 # Restart internet interfaces
 restartInternet() {
-  log "Restarting internet interfaces..."
+  greenLog "Restarting internet interfaces..."
    sudo ifdown -a && sudo ifup -a
 }
 
@@ -139,18 +139,18 @@ goProWebcamService() {
   fi
 
   if [ -z $1 ]; then
-    log "status | restart | start | stop: $(yellowLog "make some action in gopro service.")"
-    log "check-trail: $(yellowLog "to check service's log trail.")"
-    log "start-stream | stop-stream: $(yellowLog "to start/stop the GoPro expose to O.S.")"
-    log "disable-gopro | enable-gopro: $(yellowLog "to enabe/disable gopro webcam mode. Use 'goProWebcamService start' if the gopro_webcam is already started.")"
-    log "h: $(yellowLog "dispay options.")"
+    greenLog "status | restart | start | stop: $(yellowLog "make some action in gopro service.")"
+    greenLog "check-trail: $(yellowLog "to check service's log trail.")"
+    greenLog "start-stream | stop-stream: $(yellowLog "to start/stop the GoPro expose to O.S.")"
+    greenLog "disable-gopro | enable-gopro: $(yellowLog "to enabe/disable gopro webcam mode. Use 'goProWebcamService start' if the gopro_webcam is already started.")"
+    greenLog "h: $(yellowLog "dispay options.")"
   else
     if [ $1 = "h" ]; then
-      log "status | restart | start | stop: $(yellowLog "make some action in gopro service.")"
-      log "check-trail: $(yellowLog "to check service's log trail.")"
-      log "start-stream | stop-stream: $(yellowLog "to start/stop the GoPro expose to O.S.")"
-      log "disable-gopro | enable-gopro: $(yellowLog "to enabe/disable gopro webcam mode. Use 'goProWebcamService start' if the gopro_webcam is already started.")"
-      log "h: $(yellowLog "dispay options.")"
+      greenLog "status | restart | start | stop: $(yellowLog "make some action in gopro service.")"
+      greenLog "check-trail: $(yellowLog "to check service's log trail.")"
+      greenLog "start-stream | stop-stream: $(yellowLog "to start/stop the GoPro expose to O.S.")"
+      greenLog "disable-gopro | enable-gopro: $(yellowLog "to enabe/disable gopro webcam mode. Use 'goProWebcamService start' if the gopro_webcam is already started.")"
+      greenLog "h: $(yellowLog "dispay options.")"
     else
       if [ "$(uname)" = 'Darwin' ]; then
         error "This will works only in Linux"
@@ -178,7 +178,7 @@ goProWebcamService() {
                   curl http://$gopro_internal_ip/gp/gpWebcam/STOP
                 else
                   sudo systemctl $1 gopro_webcam.service
-                  log "I've finished!!"
+                  greenLog "I've finished!!"
                 fi
               fi
             fi
@@ -191,7 +191,7 @@ goProWebcamService() {
 
 # Edit GoPro service file
 editGoProWebcamService() {
-  log "Openning nano editor"
+  greenLog "Openning nano editor"
 
   sudo nano /etc/systemd/system/gopro_webcam.service
 }
