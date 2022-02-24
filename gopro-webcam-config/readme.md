@@ -25,6 +25,11 @@ OBS with a Webcam plugin:
 
 - And that's it!. Please follow the command **`goProWebcamService`** for how to use it.
 
+- ## GoPro Service at system boot
+    
+    - We must copy the [60-gopro.rules](60-gopro.rules) file as **`sudo`** to `/lib/udev/rules.d/` folder with `644` permissions.
+    - For more details check this [source](https://github.com/jschmid1/gopro_as_webcam_on_linux#start-on-plug-in) information from original repo.
+
 ## Blur background (OBS)
 
 - Once NVIDIA Broadcast was released, I turned in a big fan of the blurred background, so in this section, I'm going to document the steps I followed to get a blurred background look-alike NVIDIA Broadcast, not so accurate but much better than Linux's Zoom does.

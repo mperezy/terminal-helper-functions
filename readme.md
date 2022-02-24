@@ -5,12 +5,12 @@
 - We need to import these functions in our `~/.bashrc` file, but first let's copy the `.terminal-functions.sh` and `reset_teamviewer.sh` files in user home directory `~`.
 
 - After te first step, we must change the permissions of both files:
-    ```
+    ```shell
     $ sudo chmod 777 .terminal-functions.sh reset_teamviewer.sh
     ```
 
 - We're almost done, given the first step, we must to import the functions into our `~/.bashrc` file inserting the next as follows:
-    ```
+    ```shell
     . ~/.terminal-functions.sh
     ```
 

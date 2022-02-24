@@ -1,0 +1,2 @@
+SUBSYSTEM=="net", ATTRS{idVendor}=="2672", ATTRS{product}=="HERO9", ACTION=="add", RUN+="goProWebcamService enable-gopro"
+SUBSYSTEM=="net", ATTRS{idVendor}=="2672", ATTRS{product}=="HERO9", ACTION=="remove", RUN+="goProWebcamService disable-gopro"
