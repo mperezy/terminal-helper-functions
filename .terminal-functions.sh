@@ -34,8 +34,41 @@ checkHerokuAppLogs() {
 createBranchWording() {
   # $2 = Branch wording
   title=$(echo $2 | tr " " -)
+  branch=$1-$title
+  branchLength=${#branch}
+  pre_answer=0
 
-  echo $(greenLog "Your branch could be ->" && header "\"$1-$title\"")
+  echo $(greenLog "Your branch could be ->" && header "\"$branch\"")
+
+  if [ "$branchLength" -gt "50" ]; then
+    echo $(error "Your branch is greater than 50 characters")
+  elif [ "$branchLength" -gt "40" ] && [ "$branchLength" -le "50" ]; then
+    echo $(yellowLog "Your branch is between 40/50 characters, you're safe.")
+  else
+    echo $(greenLog "Your branch is perfect to checkout")
+  fi
+  echo ""
+
+  while [ $pre_answer != 1 ]; do
+    echo -n "Do you want to checkout? (y/N): "
+    read answer
+
+    case $answer in
+      [yY] | [yY][eE][sS])
+        pre_answer=1
+        echo $(echo "Checking out to: " && header "\"$branch\"")
+        git co -b $branch
+      ;;
+      [nN] | [nN][oO])
+        pre_answer=1
+        echo $(greenLog "Your branch is ->" && header "\"$branch\"")
+      ;;
+      *)
+        yellowLog "Please answer yes or no.\n"
+        echo ""
+      ;;
+    esac
+  done
 }
 
 setYourGithubUsernameCredentials() {
