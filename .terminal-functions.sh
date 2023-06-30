@@ -108,7 +108,7 @@ addSSHKey() {
   # $1 = SSH Key filename
 
   if [ "$(uname)" = "Darwin" ]; then
-    ssh-add -K ~/.ssh/$1
+    ssh-add --apple-use-keychain ~/.ssh/$1
   else
     ssh-add ~/.ssh/$1
   fi
